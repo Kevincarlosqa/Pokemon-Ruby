@@ -1,7 +1,7 @@
 require_relative "pokemon"
 
 class Player
-  attr_reader :species, :pokemon
+  attr_reader :name, :species, :pokemon 
   def initialize(name, species, pokemon_name = nil, pokemon_level = 1)
     @name = name
     @pokemon = Pokemon.new(pokemon_name, species, pokemon_level)
@@ -43,4 +43,3 @@ end
 # bu = Bot.new
 # p bu.species
 # p bu.pokemon
-

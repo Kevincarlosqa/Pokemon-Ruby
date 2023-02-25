@@ -1,6 +1,7 @@
 require_relative "modules/constants"
 require_relative "modules/initial_messages"
 require_relative "modules/user_input"
+require_relative "player"
 
 class Game
   include Constants
@@ -17,6 +18,7 @@ class Game
     final_message(name, chosen_pokemon_name)
 
     # Then create a Player with that information and store it in @player
+    player = Player.new(name, chosen_pokemon, chosen_pokemon_name)
 
     # Suggested game flow
     action = menu
@@ -25,15 +27,11 @@ class Game
       when "train"
         puts "Train"
         # train
-        # action = menu
       when "leader"
         puts "Leader"
         # challenge_leader
-        # action = menu
       when "stats"
-        puts "Stats"
-        # show_stats
-        # action = menu
+        show_stats(player.pokemon)
       end
       action = menu
     end
@@ -49,12 +47,26 @@ class Game
     # Complete this
   end
 
-  def show_stats
-    # Complete this
+  def show_stats(pokemon)
+    puts ""
+    puts "#{pokemon.name}:"
+    puts "Kind: #{pokemon.species}"
+    puts "Level: #{pokemon.level}"
+    puts "Type: #{pokemon.type.join(" ")}"
+    puts "\nStats:"
+    puts "HP: #{pokemon.stats[:hp]}"
+    puts "Attack: #{pokemon.stats[:attack]}"
+    puts "Defense: #{pokemon.stats[:defense]}"
+    puts "Special Attack: #{pokemon.stats[:special_attack]}"
+    puts "Special Defense: #{pokemon.stats[:special_defense]}"
+    puts "Speed: #{pokemon.stats[:speed]}"
+    puts "Experience Points: #{pokemon.experience_points}"
   end
 
   def goodbye
-    puts "\nThanks for playing Pokemon Ruby, bye bye!"
+    puts ""
+    puts "Thanks for playing Pokemon Ruby"
+    puts "This game was created with love by: Diego L., Kevin Q., Oliver P. and Crhistian T."
   end
 
   def menu
