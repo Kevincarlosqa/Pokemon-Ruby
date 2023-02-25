@@ -2,6 +2,7 @@ require_relative "modules/constants"
 require_relative "modules/initial_messages"
 require_relative "modules/user_input"
 require_relative "player"
+require_relative "battle"
 
 class Game
   include Constants
@@ -25,8 +26,7 @@ class Game
     until action == "exit"
       case action
       when "train"
-        puts "Train"
-        # train
+        train(player)
       when "leader"
         puts "Leader"
         # challenge_leader
@@ -39,8 +39,11 @@ class Game
     goodbye
   end
 
-  def train
-    # Complete this
+  def train(player)
+    puts "training"
+    bot = Bot.new
+    battle = Battle.new(player, bot)
+    battle.start
   end
 
   def challenge_leader

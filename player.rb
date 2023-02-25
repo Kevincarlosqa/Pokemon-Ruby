@@ -25,7 +25,7 @@ end
 class Bot < Player
   attr_reader :species, :pokemon
   def initialize
-    @name = "Randow Person's"
+    @name = "Random Person"
     @species = Pokedex::POKEMONS.keys.sample
     @pokemon = Pokemon.new(@species, @species, rand(1..4))
 
@@ -36,8 +36,8 @@ class Bot < Player
 
 end
 
-ne = Player.new("loquesea", "Charmander")
-ne.select_move
+# ne = Player.new("loquesea", "Charmander")
+# ne.select_move
 # bu = Bot.new
 # p bu.species
 # p bu.pokemon
