@@ -57,11 +57,18 @@ class Pokemon
     target_defensive_stat = SPECIAL_ATTACKS.include?(MOVES[target.current_move][:type]) ? target.stats[:special_defense] : target.stats[:defense]
     move_power = MOVES[@current_move][:power]
     damage = (((2 * @level / 5.0 + 2).floor * offensive_stat * move_power / target_defensive_stat).floor / 50.0).floor + 2
-    damage = damage*1.5 if critical_hit
-    type_effectiveness = calculate_multiplier(MOVES[@current_move][:type],MOVES[target.current_move][:type])
-    damage *= type_effectiveness
-    damage = damage.floor
-    target.current_hp -=damage
+    if critical_hit
+      damage *= 1.5 
+      puts "It was CRITICAL hit!"
+    end
+    type_effectiveness = calculate_effectiveness(MOVES[@current_move][:type], MOVES[target.current_move][:type])
+    damage = (damage * type_effectiveness).floor
+    target.current_hp -= damage
+    puts "It's not very effective..." if type_effectiveness <= 0.5
+    puts "It's super effective!" if type_effectiveness >= 1.5
+    puts "It doesn't affect #{target.name}!" if type_effectiveness == 0
+    puts "And it hit #{target.name} with #{damage} damage"
+    puts "--------------------------------------------------"
    
     # Print attack message 'Tortuguita used MOVE!'
     # Accuracy check
@@ -78,14 +85,14 @@ class Pokemon
     # Else, print "But it MISSED!"
   end
 
-  def calculate_multiplier(player, bot)
-    mult= 1
+  def calculate_effectiveness(attacker_type, target_type)
+    effectivenes = 1
     TYPE_MULTIPLIER.each do |hash|
-      if hash[:user] == player && hash[:target] == bot
-        mult = hash[:multiplier]
+      if hash[:user] == attacker_type && hash[:target] == target_type
+        effectivenes = hash[:multiplier]
       end
     end
-    mult
+    effectivenes
   end
 
   def increase_stats(target)

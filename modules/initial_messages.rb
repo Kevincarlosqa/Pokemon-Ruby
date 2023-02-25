@@ -19,7 +19,7 @@ DELIMETER
 
   def welcome_player(name)
     message =<<-DELIMETER
-Right! So your name is #{name.upcase}!
+\nRight! So your name is #{name.upcase}!
 Your very own POKEMON legend is about to unfold! A world of
 dreams and adventures with POKEMON awaits! Let's go!
 Here, #{name.upcase}! There are 3 POKEMON here! Haha!
@@ -31,7 +31,7 @@ DELIMETER
 
   def final_message(name, chosen_pokemon_name)
     message =<<-DELIMETER
-#{name.upcase}, raise your young #{chosen_pokemon_name.upcase} by making it fight!
+\n#{name.upcase}, raise your young #{chosen_pokemon_name.upcase} by making it fight!
 When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER
   DELIMETER
     puts message

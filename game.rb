@@ -9,29 +9,31 @@ class Game
   include InitialMessages
   include UserInput
 
+  attr_accessor :player
+
   def start
     # Create a welcome method(s) to get the name, pokemon and pokemon_name from the user
     welcome_message
-    name = get_input("First, what is your name?")
+    name = get_input("\nFirst, what is your name?")
     welcome_player(name)
     chosen_pokemon = choose_pokemon
     chosen_pokemon_name = get_pokemon_name(chosen_pokemon)
     final_message(name, chosen_pokemon_name)
 
     # Then create a Player with that information and store it in @player
-    player = Player.new(name, chosen_pokemon, chosen_pokemon_name)
+    @player = Player.new(name, chosen_pokemon, chosen_pokemon_name)
 
     # Suggested game flow
     action = menu
     until action == "exit"
       case action
       when "train"
-        train(player)
+        train
       when "leader"
         puts "Leader"
         # challenge_leader
       when "stats"
-        show_stats(player.pokemon)
+        show_stats
       end
       action = menu
     end
@@ -39,17 +41,21 @@ class Game
     goodbye
   end
 
-  def train(player)
+  def train
     bot = Bot.new
-    battle = Battle.new(player, bot)
+    battle = Battle.new(@player, bot)
     battle.start
   end
 
   def challenge_leader
-    # Complete this
+    # puede funcionar, pero habria que cambiar algunos mensajes
+    # leader = Player.new("Brook", "Onix", "Onix",10)
+    # battle = Battle.new(@player, leader)
+    # battle.start
   end
 
-  def show_stats(pokemon)
+  def show_stats
+    pokemon = @player.pokemon
     puts ""
     puts "#{pokemon.name}:"
     puts "Kind: #{pokemon.species}"
@@ -72,7 +78,7 @@ class Game
   end
 
   def menu
-    puts "#{'-' * 23}Menu#{'-' * 23}"
+    puts "\n#{'-' * 23}Menu#{'-' * 23}"
     puts ""
     puts "1. Stats        2. Train        3. Leader       4. Exit"
     print "> "

@@ -16,7 +16,7 @@ module UserInput
   end
 
   def get_pokemon_name(chosen_pokemon)
-    puts "You selected #{chosen_pokemon.upcase}. Great choice!"
+    puts "\nYou selected #{chosen_pokemon.upcase}. Great choice!"
     puts "Give your pokemon a name?"
     print "> "
     pokemon_name = gets.chomp.strip
