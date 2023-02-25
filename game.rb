@@ -40,7 +40,6 @@ class Game
   end
 
   def train(player)
-    puts "training"
     bot = Bot.new
     battle = Battle.new(player, bot)
     battle.start

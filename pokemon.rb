@@ -1,10 +1,13 @@
 require_relative "pokedex/pokemons"
+require_relative "pokedex/moves"
+require_relative "modules/constants"
 
 class Pokemon
   include Pokedex
+  include Constants
   attr_reader :name, :species, :individual_stats, :level,
               :experience_points, :stats, :moves, :type
-  attr_accessor :current_move
+  attr_accessor :current_move, :current_hp
               
 
   def initialize(name, species, level = 1)
@@ -23,10 +26,11 @@ class Pokemon
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
     @experience_points = calculate_experience_points
     @stats = calculate_stats
+    @current_hp = nil
   end
 
   def prepare_for_battle
-    # Complete this
+    @current_hp = @stats[:hp]
   end
 
   def receive_damage
@@ -38,10 +42,27 @@ class Pokemon
   # end
 
   def fainted?
-    # Complete this
+    !@current_hp.positive?
   end
 
   def attack(target)
+    puts "#{@name} used #{@current_move.upcase}!"
+    hit = MOVES[current_move][:accuracy] >= rand(1..100)
+    unless hit
+      puts "#{@name} missed the attack to #{target.name}"
+      return
+    end
+    critical_hit = 1 == rand(1..16)
+    offensive_stat = SPECIAL_ATTACKS.include?(MOVES[@current_move][:type]) ? @stats[:special_attack] : @stats[:attack]
+    target_defensive_stat = SPECIAL_ATTACKS.include?(MOVES[target.current_move][:type]) ? target.stats[:special_defense] : target.stats[:defense]
+    move_power = MOVES[@current_move][:power]
+    damage = (((2 * @level / 5.0 + 2).floor * offensive_stat * move_power / target_defensive_stat).floor / 50.0).floor + 2
+    damage = damage*1.5 if critical_hit
+    type_effectiveness = calculate_multiplier(MOVES[@current_move][:type],MOVES[target.current_move][:type])
+    damage *= type_effectiveness
+    damage = damage.floor
+    target.current_hp -=damage
+   
     # Print attack message 'Tortuguita used MOVE!'
     # Accuracy check
     # If the movement is not missed
@@ -55,6 +76,16 @@ class Pokemon
     # ---- "It doesn't affect [target name]!" when effectivenes is 0
     # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
     # Else, print "But it MISSED!"
+  end
+
+  def calculate_multiplier(player, bot)
+    mult= 1
+    TYPE_MULTIPLIER.each do |hash|
+      if hash[:user] == player && hash[:target] == bot
+        mult = hash[:multiplier]
+      end
+    end
+    mult
   end
 
   def increase_stats(target)
