@@ -4,12 +4,14 @@ class Pokemon
   include Pokedex
   attr_reader :name, :species, :individual_stats, :level,
               :experience_points, :stats, :moves, :type
+  attr_accessor :current_move
               
 
   def initialize(name, species, level = 1)
     @name = name
     @level = level
     @species = species.capitalize
+    @current_move = nil
     pokemon = POKEMONS.select{|_key, value| value[:species] == @species }
     @type = pokemon[@species][:type]
     @base_exp = pokemon[@species][:base_exp]
@@ -31,9 +33,9 @@ class Pokemon
     # Complete this
   end
 
-  def set_current_move
-    # Complete this
-  end
+  # def set_current_move(move)
+  #   @current_move = move
+  # end
 
   def fainted?
     # Complete this

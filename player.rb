@@ -5,7 +5,6 @@ class Player
   def initialize(name, species, pokemon_name = nil, pokemon_level = 1)
     @name = name
     @pokemon = Pokemon.new(pokemon_name, species, pokemon_level)
-    @move_selected = nil
   end
 
   def select_move
@@ -19,7 +18,7 @@ class Player
       print "> "
       input = gets.chomp.downcase
     end
-    @move_selected = input
+    @pokemon.current_move = input
   end
 end
 
@@ -29,17 +28,16 @@ class Bot < Player
     @name = "Randow Person's"
     @species = Pokedex::POKEMONS.keys.sample
     @pokemon = Pokemon.new(@species, @species, rand(1..4))
-    @move_selected = nil
 
   end
   def select_move
-    @move_selected = @pokemon.moves.sample
+    @pokemon.current_move = @pokemon.moves.sample
   end
 
 end
 
-# ne = Player.new("loquesea", "Charmander")
-# ne.select_move
+ne = Player.new("loquesea", "Charmander")
+ne.select_move
 # bu = Bot.new
 # p bu.species
 # p bu.pokemon
