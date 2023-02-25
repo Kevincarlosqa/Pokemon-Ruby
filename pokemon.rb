@@ -2,19 +2,21 @@ require_relative "pokedex/pokemons"
 
 class Pokemon
   include Pokedex
-  attr_reader :individual_stats, :experience_points, :stats, :moves, :type
+  attr_reader :name, :species, :individual_stats, :level,
+              :experience_points, :stats, :moves, :type
+              
 
   def initialize(name, species, level = 1)
     @name = name
     @level = level
-    @species = species
-    pokemon = Pokedex::POKEMONS.select{|_key, value| value[:species] == species.capitalize }
-    @type = pokemon[species][:type]
-    @base_exp = pokemon[species][:base_exp]
-    @growth_rate = pokemon[species][:growth_rate]
-    @base_stats = pokemon[species][:base_stats]
-    @effort_points = pokemon[species][:effort_points]
-    @moves = pokemon[species][:moves]
+    @species = species.capitalize
+    pokemon = POKEMONS.select{|_key, value| value[:species] == @species }
+    @type = pokemon[@species][:type]
+    @base_exp = pokemon[@species][:base_exp]
+    @growth_rate = pokemon[@species][:growth_rate]
+    @base_stats = pokemon[@species][:base_stats]
+    @effort_points = pokemon[@species][:effort_points]
+    @moves = pokemon[@species][:moves]
     @individual_stats = generate_individual_stats
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
     @experience_points = calculate_experience_points
@@ -75,7 +77,7 @@ class Pokemon
 
   def calculate_experience_points
     return 0 if @level == 1
-    Pokedex::LEVEL_TABLES[@growth_rate][@level - 1]
+    LEVEL_TABLES[@growth_rate][@level - 1]
   end
 
   def calculate_stats
@@ -106,4 +108,3 @@ end
 
 # pokemon = Pokemon.new("Diego", "Bulbasaur", 2)
 # puts pokemon.stats
-
