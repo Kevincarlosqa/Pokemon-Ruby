@@ -2,6 +2,7 @@ require_relative "pokemon"
 
 class Player
   attr_reader :name, :species, :pokemon 
+  attr_accessor :fainted
   def initialize(name, species, pokemon_name = nil, pokemon_level = 1)
     @name = name
     @pokemon = Pokemon.new(pokemon_name, species, pokemon_level)
@@ -9,7 +10,8 @@ class Player
 
   def select_move
     @pokemon.moves.each.with_index do |move, index|
-      print "#{index+1}. #{move}      "
+  
+    print "#{index+1}. #{move}      "
     end
     puts "\n"
     print "> "
