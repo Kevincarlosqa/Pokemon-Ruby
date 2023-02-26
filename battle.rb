@@ -50,14 +50,6 @@ include Constants
     winner = @player.pokemon.fainted? ? @bot : @player
     loser = winner == @player ? @bot : @player
 
-    if winner == @player
-      gain_exp = (@bot.pokemon.base_exp * @bot.pokemon.level / 7.0).floor
-      puts "Add winner increase stats"
-      p gain_exp
-      @player.pokemon.update_current_exp(gain_exp)
-
-    end
-
     puts ""
     puts "**************************************************"
     puts "#{loser.pokemon.name} FAINTED!"
@@ -66,6 +58,16 @@ include Constants
     puts "**************************************************"
     puts ""
     puts ""
+
+    if winner == @player
+      gain_exp = (@bot.pokemon.base_exp * @bot.pokemon.level / 7.0).floor
+      @player.pokemon.increase_stats(@bot.pokemon, gain_exp)
+      if @bot.instance_of? Leader
+        puts "Congratulation! You have won the game!"
+        puts "You can continue training your Pokemon if you want"
+      end
+    end
+
     # Until one pokemon faints
     # --Print Battle Status
     # --Both players select their moves

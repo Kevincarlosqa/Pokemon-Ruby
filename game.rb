@@ -68,7 +68,6 @@ class Game
     puts "Special Defense: #{pokemon.stats[:special_defense]}"
     puts "Speed: #{pokemon.stats[:speed]}"
     puts "Experience Points: #{pokemon.experience_points}"
-    puts pokemon.current_exp
   end
 
   def goodbye
