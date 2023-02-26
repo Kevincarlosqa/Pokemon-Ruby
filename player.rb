@@ -5,7 +5,7 @@ class Player
   attr_accessor :fainted
   def initialize(name, species, pokemon_name = nil, pokemon_level = 1)
     @name = name
-    @pokemon = Pokemon.new(pokemon_name, species, 3)
+    @pokemon = Pokemon.new(pokemon_name, species, pokemon_level)
   end
 
   def select_move
@@ -29,7 +29,7 @@ class Bot < Player
   def initialize
     @name = "Random Person"
     @species = Pokedex::POKEMONS.keys.sample
-    @pokemon = Pokemon.new(@species, @species, 1)
+    @pokemon = Pokemon.new(@species, @species, rand(1..3))
 
   end
   def select_move

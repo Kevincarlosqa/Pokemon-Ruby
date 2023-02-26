@@ -6,8 +6,8 @@ class Pokemon
   include Pokedex
   include Constants
   attr_reader :name, :species, :individual_stats, :level,
-              :experience_points, :stats, :moves, :type, :base_exp
-  attr_accessor :current_move, :current_hp , :current_exp
+              :stats, :moves, :type, :base_exp
+  attr_accessor :current_move, :current_hp , :experience_points
               
 
   def initialize(name, species, level = 1)
@@ -27,20 +27,11 @@ class Pokemon
     @experience_points = calculate_experience_points
     @stats = calculate_stats
     @current_hp = nil
-    @current_exp = @experience_points
   end
 
   def prepare_for_battle
     @current_hp = @stats[:hp]
   end
-
-  def receive_damage
-    # Complete this
-  end
-
-  # def set_current_move(move)
-  #   @current_move = move
-  # end
 
   def fainted?
     !@current_hp.positive?
@@ -59,10 +50,10 @@ class Pokemon
     move_power = MOVES[@current_move][:power]
     damage = (((2 * @level / 5.0 + 2).floor * offensive_stat * move_power / target_defensive_stat).floor / 50.0).floor + 2
     if critical_hit
-      damage *= 1.5 
+      damage *= 1.5
       puts "It was CRITICAL hit!"
     end
-    type_effectiveness = calculate_effectiveness(MOVES[@current_move][:type], MOVES[target.current_move][:type])
+    type_effectiveness = calculate_effectiveness(MOVES[@current_move][:type], target.type)
     damage = (damage * type_effectiveness).floor
     target.current_hp -= damage
     puts "It's not very effective..." if type_effectiveness <= 0.5
@@ -87,6 +78,14 @@ class Pokemon
   end
 
   def calculate_effectiveness(attacker_type, target_type)
+    all_effectivenes = []
+    target_type.each do |type|
+      all_effectivenes.push(calculate_individual_effectiveness(attacker_type, type))
+    end
+    all_effectivenes.reduce(:*)
+  end
+
+  def calculate_individual_effectiveness(attacker_type, target_type)
     effectivenes = 1
     TYPE_MULTIPLIER.each do |hash|
       if hash[:user] == attacker_type && hash[:target] == target_type
@@ -95,20 +94,23 @@ class Pokemon
     end
     effectivenes
   end
-#target
-  def increase_stats
+
+  def increase_stats(target, gain_exp)
     # Increase stats base on the defeated pokemon and print message "#[pokemon name] gained [amount] experience points"
-    puts "stats updated"
+    pokemon = POKEMONS[target.name][:effort_points]
+    @effort_values[pokemon[:type]] += pokemon[:amount]
+    puts "#{@name} gained #{gain_exp} experience points"
+    # update_current_exp(gain_exp)
+    @experience_points += gain_exp
+    if @experience_points >= LEVEL_TABLES[@growth_rate][@level]
+      @level += 1
+      puts "#{@name} reached level #{@level}!"
+      @stats = calculate_stats
+    end
     # If the new experience point are enough to level up, do it and print
     # message "#[pokemon name] reached level [level]!" # -- Re-calculate the stat
   end
-  def update_current_exp(exp_gain)
-    @current_exp += exp_gain
-    if LEVEL_TABLES[@growth_rate][@level] <= @current_exp
-      @level += 1
-      increase_stats
-    end
-  end
+
   def calculate_experience_points
     return 0 if @level == 1
     LEVEL_TABLES[@growth_rate][@level - 1]
@@ -136,11 +138,11 @@ class Pokemon
     special_defense = calculate_others_stats(@base_stats[:special_defense], @individual_stats[:special_defense], @effort_values[:special_defense], @level)
     speed = calculate_others_stats(@base_stats[:speed], @individual_stats[:speed], @effort_values[:speed], @level)
     { 
-      hp: , 
-      attack: , 
-      defense: , 
-      special_attack: , 
-      special_defense: , 
+      hp:,
+      attack:,
+      defense:,
+      special_attack:,
+      special_defense:,
       speed:  
     }
   end
