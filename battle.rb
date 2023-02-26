@@ -15,7 +15,11 @@ include Constants
     # Prepare the Battle (print messages and prepare pokemons)
     @player.pokemon.prepare_for_battle
     @bot.pokemon.prepare_for_battle
-    puts "#{@player.name} challenge #{@bot.name} for training"
+    if @bot.instance_of? Leader
+      puts "#{@player.name} challenge the Gym Leader Brock for a fight!"
+    else
+      puts "#{@player.name} challenge #{@bot.name} for training"
+    end
     puts "#{@bot.name} has a #{@bot.pokemon.name} level #{@bot.pokemon.level}"
     puts "What do you want to do now?"
     puts ""
@@ -47,8 +51,11 @@ include Constants
     loser = winner == @player ? @bot : @player
 
     if winner == @player
+      gain_exp = (@bot.pokemon.base_exp * @bot.pokemon.level / 7.0).floor
       puts "Add winner increase stats"
-      # increasea winner stats
+      p gain_exp
+      @player.pokemon.update_current_exp(gain_exp)
+
     end
 
     puts ""

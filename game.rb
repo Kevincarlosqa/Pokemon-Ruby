@@ -30,8 +30,7 @@ class Game
       when "train"
         train
       when "leader"
-        puts "Leader"
-        # challenge_leader
+        challenge_leader
       when "stats"
         show_stats
       end
@@ -49,9 +48,9 @@ class Game
 
   def challenge_leader
     # puede funcionar, pero habria que cambiar algunos mensajes
-    # leader = Player.new("Brook", "Onix", "Onix",10)
-    # battle = Battle.new(@player, leader)
-    # battle.start
+    leader = Leader.new
+    battle = Battle.new(@player, leader)
+    battle.start
   end
 
   def show_stats
@@ -69,6 +68,7 @@ class Game
     puts "Special Defense: #{pokemon.stats[:special_defense]}"
     puts "Speed: #{pokemon.stats[:speed]}"
     puts "Experience Points: #{pokemon.experience_points}"
+    puts pokemon.current_exp
   end
 
   def goodbye
