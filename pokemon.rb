@@ -61,20 +61,6 @@ class Pokemon
     puts "It doesn't affect #{target.name}!" if type_effectiveness == 0
     puts "And it hit #{target.name} with #{damage} damage"
     puts "--------------------------------------------------"
-   
-    # Print attack message 'Tortuguita used MOVE!'
-    # Accuracy check
-    # If the movement is not missed
-    # -- Calculate base damage
-    # -- Critical Hit check
-    # -- If critical, multiply base damage and print message 'It was CRITICAL hit!'
-    # -- Effectiveness check
-    # -- Mutltiply damage by effectiveness multiplier and round down. Print message if neccesary
-    # ---- "It's not very effective..." when effectivenes is less than or equal to 0.5
-    # ---- "It's super effective!" when effectivenes is greater than or equal to 1.5
-    # ---- "It doesn't affect [target name]!" when effectivenes is 0
-    # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
-    # Else, print "But it MISSED!"
   end
 
   def calculate_effectiveness(attacker_type, target_type)
@@ -96,19 +82,15 @@ class Pokemon
   end
 
   def increase_stats(target, gain_exp)
-    # Increase stats base on the defeated pokemon and print message "#[pokemon name] gained [amount] experience points"
     pokemon = POKEMONS[target.name][:effort_points]
     @effort_values[pokemon[:type]] += pokemon[:amount]
     puts "#{@name} gained #{gain_exp} experience points"
-    # update_current_exp(gain_exp)
     @experience_points += gain_exp
     if @experience_points >= LEVEL_TABLES[@growth_rate][@level]
       @level += 1
       puts "#{@name} reached level #{@level}!"
       @stats = calculate_stats
     end
-    # If the new experience point are enough to level up, do it and print
-    # message "#[pokemon name] reached level [level]!" # -- Re-calculate the stat
   end
 
   def calculate_experience_points
@@ -155,6 +137,3 @@ class Pokemon
     ((2 * base_stat + stat_individual_value + stat_effort) * level / 100 + 5).floor
   end 
 end
-
-# pokemon = Pokemon.new("Diego", "Bulbasaur", 2)
-# puts pokemon.stats

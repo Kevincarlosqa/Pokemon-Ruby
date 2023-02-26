@@ -12,7 +12,6 @@ class Game
   attr_accessor :player
 
   def start
-    # Create a welcome method(s) to get the name, pokemon and pokemon_name from the user
     welcome_message
     name = get_input("\nFirst, what is your name?")
     welcome_player(name)
@@ -20,10 +19,8 @@ class Game
     chosen_pokemon_name = get_pokemon_name(chosen_pokemon)
     final_message(name, chosen_pokemon_name)
 
-    # Then create a Player with that information and store it in @player
     @player = Player.new(name, chosen_pokemon, chosen_pokemon_name)
 
-    # Suggested game flow
     action = menu
     until action == "exit"
       case action
@@ -47,7 +44,6 @@ class Game
   end
 
   def challenge_leader
-    # puede funcionar, pero habria que cambiar algunos mensajes
     leader = Leader.new
     battle = Battle.new(@player, leader)
     battle.start

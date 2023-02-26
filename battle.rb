@@ -3,8 +3,8 @@ require_relative "pokedex/moves"
 
 class Battle
   include Pokedex
-# (complete parameters)
-include Constants
+  include Constants
+  
   def initialize(player, bot)
     @player = player
     @bot = bot
@@ -12,7 +12,6 @@ include Constants
   end
 
   def start
-    # Prepare the Battle (print messages and prepare pokemons)
     @player.pokemon.prepare_for_battle
     @bot.pokemon.prepare_for_battle
     if @bot.instance_of? Leader
@@ -67,21 +66,6 @@ include Constants
         puts "You can continue training your Pokemon if you want"
       end
     end
-
-    # Until one pokemon faints
-    # --Print Battle Status
-    # --Both players select their moves
-
-    # --Calculate which go first and which second
-
-    # --First attack second
-    # --If second is fainted, print fainted message
-    # --If second not fainted, second attack first
-    # --If first is fainted, print fainted message
-
-    # Check which player won and print messages
-    # If the winner is the Player increase pokemon stats
-
   end
 
   def turn_order(player,bot)
@@ -104,5 +88,4 @@ include Constants
     puts "#{bot.name}'s #{bot.pokemon.name} - Level #{bot.pokemon.level}"
     puts "HP: #{bot.pokemon.current_hp}"
   end
-  
 end

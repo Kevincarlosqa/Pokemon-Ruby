@@ -49,11 +49,3 @@ class Leader < Player
     @pokemon.current_move = @pokemon.moves.sample
   end
 end
-
-# ne = Leader.new
-#  p ne.class
-# #  p ne.pokemon
-# puts ne.instance_of? Leader
-# bu = Bot.new
-# p bu.species
-# p bu.pokemon
