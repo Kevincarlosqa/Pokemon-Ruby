@@ -55,7 +55,7 @@ class Game
     puts "#{pokemon.name}:"
     puts "Kind: #{pokemon.species}"
     puts "Level: #{pokemon.level}"
-    puts "Type: #{pokemon.type.join(" ")}"
+    puts "Type: #{pokemon.type.join(' ')}"
     puts "\nStats:"
     puts "HP: #{pokemon.stats[:hp]}"
     puts "Attack: #{pokemon.stats[:attack]}"

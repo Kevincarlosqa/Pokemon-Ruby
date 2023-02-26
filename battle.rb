@@ -4,7 +4,7 @@ require_relative "pokedex/moves"
 class Battle
   include Pokedex
   include Constants
-  
+
   def initialize(player, bot)
     @player = player
     @bot = bot
@@ -30,16 +30,17 @@ class Battle
       option = gets.chomp.downcase
     end
     return if option == "leave"
+
     puts "\n#{@bot.name} sent out #{@bot.pokemon.species.upcase}!"
     puts "#{@player.name} sent out #{@player.pokemon.species.upcase}!"
     puts "\n-------------------Battle Start!-------------------\n\n"
     until @player.pokemon.fainted? || @bot.pokemon.fainted?
-      battle_status(@player,@bot)
+      battle_status(@player, @bot)
       puts "\n#{@player.name}, select your move:\n\n"
       @player.select_move
       @bot.select_move
       puts "\n--------------------------------------------------"
-      first_attacker = turn_order(@player,@bot)
+      first_attacker = turn_order(@player, @bot)
       second_attacker = first_attacker == @player ? @bot : @player
       first_attacker.pokemon.attack(second_attacker.pokemon)
       second_attacker.pokemon.attack(first_attacker.pokemon) unless second_attacker.pokemon.fainted?
@@ -58,30 +59,30 @@ class Battle
     puts ""
     puts ""
 
-    if winner == @player
-      gain_exp = (@bot.pokemon.base_exp * @bot.pokemon.level / 7.0).floor
-      @player.pokemon.increase_stats(@bot.pokemon, gain_exp)
-      if @bot.instance_of? Leader
-        puts "Congratulation! You have won the game!"
-        puts "You can continue training your Pokemon if you want"
-      end
+    return unless winner == @player
+
+    gain_exp = (@bot.pokemon.base_exp * @bot.pokemon.level / 7.0).floor
+    @player.pokemon.increase_stats(@bot.pokemon, gain_exp)
+    if @bot.instance_of? Leader
+      puts "Congratulation! You have won the game!"
+      puts "You can continue training your Pokemon if you want"
     end
   end
 
-  def turn_order(player,bot)
+  def turn_order(player, bot)
     player_move = player.pokemon.current_move
     bot_move = bot.pokemon.current_move
     return player if MOVES[player_move][:priority] > MOVES[bot_move][:priority]
     return bot if MOVES[player_move][:priority] < MOVES[bot_move][:priority]
     if player.pokemon.stats[:speed] > bot.pokemon.stats[:speed]
-      return player
+      player
     elsif player.pokemon.stats[:speed] < bot.pokemon.stats[:speed]
-      return bot
+      bot
     else
       [player, bot].sample
     end
   end
-    
+
   def battle_status(player, bot)
     puts "#{player.name.capitalize}'s #{player.pokemon.name.upcase} - Level #{player.pokemon.level}"
     puts "HP: #{player.pokemon.current_hp}"

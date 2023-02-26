@@ -8,9 +8,9 @@ module UserInput
     print "> "
     input = gets.chomp
     while input.empty?
-        puts "This input shouldn't be empty"
-        print "> "
-        input = gets.chomp
+      puts "This input shouldn't be empty"
+      print "> "
+      input = gets.chomp
     end
     input
   end
@@ -21,6 +21,7 @@ module UserInput
     print "> "
     pokemon_name = gets.chomp.strip
     return chosen_pokemon.capitalize if pokemon_name.empty?
+
     pokemon_name
   end
 
