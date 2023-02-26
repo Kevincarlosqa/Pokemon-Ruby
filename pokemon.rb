@@ -6,8 +6,8 @@ class Pokemon
   include Pokedex
   include Constants
   attr_reader :name, :species, :individual_stats, :level,
-              :experience_points, :stats, :moves, :type
-  attr_accessor :current_move, :current_hp
+              :experience_points, :stats, :moves, :type, :base_exp
+  attr_accessor :current_move, :current_hp , :current_exp
               
 
   def initialize(name, species, level = 1)
@@ -27,6 +27,7 @@ class Pokemon
     @experience_points = calculate_experience_points
     @stats = calculate_stats
     @current_hp = nil
+    @current_exp = @experience_points
   end
 
   def prepare_for_battle
@@ -94,12 +95,23 @@ class Pokemon
     end
     effectivenes
   end
-
-  def increase_stats(target)
+#target
+  def increase_stats
     # Increase stats base on the defeated pokemon and print message "#[pokemon name] gained [amount] experience points"
-
+    puts "stats updated"
     # If the new experience point are enough to level up, do it and print
     # message "#[pokemon name] reached level [level]!" # -- Re-calculate the stat
+  end
+  def update_current_exp(exp_gain)
+    @current_exp += exp_gain
+    if LEVEL_TABLES[@growth_rate][@level] <= @current_exp
+      @level += 1
+      increase_stats
+    end
+  end
+  def calculate_experience_points
+    return 0 if @level == 1
+    LEVEL_TABLES[@growth_rate][@level - 1]
   end
 
   private
@@ -115,10 +127,6 @@ class Pokemon
     }
   end
 
-  def calculate_experience_points
-    return 0 if @level == 1
-    LEVEL_TABLES[@growth_rate][@level - 1]
-  end
 
   def calculate_stats
     hp = calculate_hp(@base_stats[:hp], @individual_stats[:hp], @effort_values[:hp], @level)
